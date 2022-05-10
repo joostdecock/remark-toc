@@ -15,9 +15,14 @@ export default function remarkToc(options = {}) {
     const result = toc(
       node,
       Object.assign({}, options, {
-        heading: options.heading || 'toc|table[ -]of[ -]contents?'
+        heading: options.heading || (options.tocOnly ? false : 'toc|table[ -]of[ -]contents?')
       })
     )
+
+    if (options.tocOnly && result.map) {
+      node.children = [result.map]
+      return
+    }
 
     if (
       result.endIndex === null ||
